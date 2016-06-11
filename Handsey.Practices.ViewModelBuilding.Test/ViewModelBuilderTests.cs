@@ -34,7 +34,7 @@
                 x => x.Map(It.IsAny<EPiServerModel>(), It.IsAny<ViewModel>()));
 
             _contentHandlerPipeline.Setup(
-                x => x.Raise(It.IsAny<HandlerArgs<EPiServerModel, ViewModel>>())).Returns(async () => false);
+                x => x.Raise(It.IsAny<HandlerArgs<EPiServerModel, ViewModel>>())).ReturnsAsync(false);
 
             // Act
             ViewModel viewModel = await _viewModelBuilder.BuildAsync<EPiServerModel, ViewModel>(new EPiServerModel() { Title = "MoFo" });
@@ -56,7 +56,7 @@
                 x => x.Map(It.IsAny<EPiServerModel>(), It.IsAny<ViewModel>()));
 
             _contentHandlerPipeline.Setup(
-                x => x.Raise(It.IsAny<HandlerArgs<EPiServerModel, ViewModel>>())).Returns(async () => true);
+                x => x.Raise(It.IsAny<HandlerArgs<EPiServerModel, ViewModel>>())).ReturnsAsync(true);
 
             // Act
             ViewModel viewModel = await _viewModelBuilder.BuildAsync<FormModel, EPiServerModel, ViewModel>(new FormModel() { Step = 1 }, new EPiServerModel() { Title = "MoFo" });
