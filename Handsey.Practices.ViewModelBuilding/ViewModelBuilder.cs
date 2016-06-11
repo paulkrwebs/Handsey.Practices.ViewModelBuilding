@@ -1,5 +1,7 @@
 ﻿namespace Handsey.Practices.ViewModelBuilding
 {
+    using System.Threading.Tasks;
+
     public class ViewModelBuilder : IViewModelBuilder
     {
         private readonly IPropertyMapper _propertyMapper;
@@ -11,35 +13,29 @@
             _propertyMapper = propertyMapper;
         }
 
-        public TToCreate Build<TFrom, TToCreate>(TFrom @from, bool mapProperties = true)
+        public async Task<TToCreate> BuildAsync<TFrom, TToCreate>(TFrom @from)
             where TToCreate : new()
-        {
-            var to = CreateAndDefaultMap<TFrom, TToCreate>(@from, mapProperties);
-
-            var args = new HandlerArgs<TFrom, TToCreate>(@from, to);
-            _contentHandlerPipeline.Raise(args);
-
-            return to;
-        }
-
-        public TToCreate Build<TData, TFrom, TToCreate>(TData data, TFrom @from, bool mapProperties = true) where TToCreate : new()
-        {
-            var to = CreateAndDefaultMap<TFrom, TToCreate>(@from, mapProperties);
-
-            var args = new HandlerArgs<TData, TFrom, TToCreate>(data, @from, to);
-            _contentHandlerPipeline.Raise(args);
-
-            return to;
-        }
-
-        private TToCreate CreateAndDefaultMap<TFrom, TToCreate>(TFrom @from, bool mapProperties) where TToCreate : new()
         {
             var to = new TToCreate();
 
-            if (mapProperties)
-            {
-                _propertyMapper.Map(@from, to);
-            }
+            var args = new HandlerArgs<TFrom, TToCreate>(@from, to);
+            var handled = await _contentHandlerPipeline.Raise(args);
+
+            if (!handled)
+                _propertyMapper.Map(from, to);
+
+            return to;
+        }
+
+        public async Task<TToCreate> BuildAsync<TData, TFrom, TToCreate>(TData data, TFrom @from) where TToCreate : new()
+        {
+            var to = new TToCreate();
+
+            var args = new HandlerArgs<TData, TFrom, TToCreate>(data, @from, to);
+            var handled = await _contentHandlerPipeline.Raise(args);
+
+            if (!handled)
+                _propertyMapper.Map(from, to);
 
             return to;
         }

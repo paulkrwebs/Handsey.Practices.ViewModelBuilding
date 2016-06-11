@@ -16,7 +16,6 @@
 
         #region Tests
 
-        [SetUp]
         public void Setup()
         {
             _contentHandlerPipeline = new Mock<IContentHandlerPipeline>();
@@ -25,14 +24,20 @@
         }
 
         [Test]
-        public void Build_EpiServerModel_ModelMappedAndBuilt()
+        public async void Build_EpiServerModel_ModelBuiltButNotHandledSoDefaultMappingUsed()
         {
             // Arrange
+            // The normal "Setup" attribute doesn't work with async methods
+            Setup();
+
             _propertyMapper.Setup(
-                x => x.Map<EPiServerModel, ViewModel>(It.IsAny<EPiServerModel>(), It.IsAny<ViewModel>()));
+                x => x.Map(It.IsAny<EPiServerModel>(), It.IsAny<ViewModel>()));
+
+            _contentHandlerPipeline.Setup(
+                x => x.Raise(It.IsAny<HandlerArgs<EPiServerModel, ViewModel>>())).Returns(async () => false);
 
             // Act
-            ViewModel viewModel = _viewModelBuilder.Build<EPiServerModel, ViewModel>(new EPiServerModel() { Title = "MoFo" });
+            ViewModel viewModel = await _viewModelBuilder.BuildAsync<EPiServerModel, ViewModel>(new EPiServerModel() { Title = "MoFo" });
 
             // Assert
             Assert.That(viewModel, Is.Not.Null);
@@ -41,40 +46,28 @@
         }
 
         [Test]
-        public void Build_EpiServerModel_ModelMappingFalseSoBuiltAndNotMapped()
+        public async void Build_EpiServerModelAndFormModel_ModelBuiltButAndHandledSoDefaultMappingUsed()
         {
             // Arrange
+            // The normal "Setup" attribute doesn't work with async methods
+            Setup();
+
             _propertyMapper.Setup(
-                x => x.Map<EPiServerModel, ViewModel>(It.IsAny<EPiServerModel>(), It.IsAny<ViewModel>()));
+                x => x.Map(It.IsAny<EPiServerModel>(), It.IsAny<ViewModel>()));
+
+            _contentHandlerPipeline.Setup(
+                x => x.Raise(It.IsAny<HandlerArgs<EPiServerModel, ViewModel>>())).Returns(async () => true);
 
             // Act
-            ViewModel viewModel = _viewModelBuilder.Build<EPiServerModel, ViewModel>(new EPiServerModel() { Title = "MoFo" }, false);
+            ViewModel viewModel = await _viewModelBuilder.BuildAsync<FormModel, EPiServerModel, ViewModel>(new FormModel() { Step = 1 }, new EPiServerModel() { Title = "MoFo" });
 
             // Assert
             Assert.That(viewModel, Is.Not.Null);
             _contentHandlerPipeline.Verify(c => c.Raise(It.IsAny<HandlerArgs<EPiServerModel, ViewModel>>()), Times.Once());
-            _propertyMapper.Verify(x => x.Map(It.IsAny<EPiServerModel>(), It.IsAny<ViewModel>()), Times.Never);
-        }
-
-        [Test]
-        public void Build_EpiServerModelAndFormModel_ModelMappingTrueSoBuiltAndMapped()
-        {
-            // Arrange
-            _propertyMapper.Setup(
-                x => x.Map<EPiServerModel, ViewModel>(It.IsAny<EPiServerModel>(), It.IsAny<ViewModel>()));
-
-            // Act
-            ViewModel viewModel = _viewModelBuilder.Build<FormModel, EPiServerModel, ViewModel>(new FormModel() { Step = 1 }, new EPiServerModel() { Title = "MoFo" });
-
-            // Assert
-            Assert.That(viewModel, Is.Not.Null);
-            _contentHandlerPipeline.Verify(c => c.Raise(It.IsAny<HandlerArgs<EPiServerModel, ViewModel>>()), Times.Once());
-            _propertyMapper.Verify(x => x.Map(It.IsAny<EPiServerModel>(), It.IsAny<ViewModel>()), Times.AtLeastOnce());
+            _propertyMapper.Verify(x => x.Map(It.IsAny<EPiServerModel>(), It.IsAny<ViewModel>()), Times.Never());
         }
 
         #endregion Tests
-
-
 
         #region Data
 
@@ -94,6 +87,5 @@
         }
 
         #endregion Data
-
     }
 }

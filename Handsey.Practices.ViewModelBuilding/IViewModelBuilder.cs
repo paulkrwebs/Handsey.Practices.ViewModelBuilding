@@ -1,11 +1,13 @@
 ﻿namespace Handsey.Practices.ViewModelBuilding
 {
+    using System.Threading.Tasks;
+
     public interface IViewModelBuilder
     {
-        TToCreate Build<TFrom, TToCreate>(TFrom @from, bool mapProperties = true)
+        Task<TToCreate> BuildAsync<TFrom, TToCreate>(TFrom @from)
             where TToCreate : new();
 
-        TToCreate Build<TData, TFrom, TToCreate>(TData data, TFrom @from, bool mapProperties = true)
+        Task<TToCreate> BuildAsync<TData, TFrom, TToCreate>(TData data, TFrom @from)
             where TToCreate : new();
     }
 }

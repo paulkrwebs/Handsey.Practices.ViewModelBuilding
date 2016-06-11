@@ -1,8 +1,10 @@
 ﻿namespace Handsey.Practices.ViewModelBuilding
 {
+    using System.Threading.Tasks;
+
     public interface IContentHandlerPipeline
     {
-        void Raise<THandlerArgs>(THandlerArgs args)
+        Task<bool> Raise<THandlerArgs>(THandlerArgs args)
             where THandlerArgs : HandlerArgs;
     }
 }
