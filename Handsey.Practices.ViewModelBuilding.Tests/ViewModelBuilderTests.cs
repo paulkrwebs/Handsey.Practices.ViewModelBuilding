@@ -1,4 +1,4 @@
-﻿namespace Handsey.Practices.ViewModelBuilding.Test
+﻿namespace Handsey.Practices.ViewModelBuilding.Tests
 {
     using Moq;
     using NUnit.Framework;

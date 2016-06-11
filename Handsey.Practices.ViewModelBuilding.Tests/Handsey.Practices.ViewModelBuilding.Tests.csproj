@@ -7,8 +7,8 @@
     <ProjectGuid>{0394C2B9-1205-465A-BFB3-8B4192A820FA}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Handsey.Practices.ViewModelBuilding.Test</RootNamespace>
-    <AssemblyName>Handsey.Practices.ViewModelBuilding.Test</AssemblyName>
+    <RootNamespace>Handsey.Practices.ViewModelBuilding.Tests</RootNamespace>
+    <AssemblyName>Handsey.Practices.ViewModelBuilding.Tests</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
