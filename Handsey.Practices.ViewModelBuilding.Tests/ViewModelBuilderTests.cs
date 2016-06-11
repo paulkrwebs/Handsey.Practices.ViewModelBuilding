@@ -24,7 +24,7 @@
         }
 
         [Test]
-        public async void Build_EpiServerModel_ModelBuiltButNotHandledSoDefaultMappingUsed()
+        public async void Build_EpiServerModel_ModelBuiltAndNotHandledSoDefaultMappingUsed()
         {
             // Arrange
             // The normal "Setup" attribute doesn't work with async methods
@@ -42,11 +42,11 @@
             // Assert
             Assert.That(viewModel, Is.Not.Null);
             _contentHandlerPipeline.Verify(c => c.Raise(It.IsAny<HandlerArgs<EPiServerModel, ViewModel>>()), Times.Once());
-            _propertyMapper.Verify(x => x.Map(It.IsAny<EPiServerModel>(), It.IsAny<ViewModel>()), Times.AtLeastOnce());
+            _propertyMapper.Verify(x => x.Map(It.IsAny<EPiServerModel>(), It.IsAny<ViewModel>()), Times.Once());
         }
 
         [Test]
-        public async void Build_EpiServerModelAndFormModel_ModelBuiltButAndHandledSoDefaultMappingUsed()
+        public async void Build_EpiServerModel_ModelBuiltAndHandledSoDefaultNotMappingUsed()
         {
             // Arrange
             // The normal "Setup" attribute doesn't work with async methods
@@ -59,11 +59,55 @@
                 x => x.Raise(It.IsAny<HandlerArgs<EPiServerModel, ViewModel>>())).ReturnsAsync(true);
 
             // Act
-            ViewModel viewModel = await _viewModelBuilder.BuildAsync<FormModel, EPiServerModel, ViewModel>(new FormModel() { Step = 1 }, new EPiServerModel() { Title = "MoFo" });
+            ViewModel viewModel = await _viewModelBuilder.BuildAsync<EPiServerModel, ViewModel>(new EPiServerModel() { Title = "MoFo" });
 
             // Assert
             Assert.That(viewModel, Is.Not.Null);
             _contentHandlerPipeline.Verify(c => c.Raise(It.IsAny<HandlerArgs<EPiServerModel, ViewModel>>()), Times.Once());
+            _propertyMapper.Verify(x => x.Map(It.IsAny<EPiServerModel>(), It.IsAny<ViewModel>()), Times.Never());
+        }
+
+        [Test]
+        public async void Build_EpiServerModelAndFormModel_ModelBuiltAndNotHandledSoDefaultMappingUsed()
+        {
+            // Arrange
+            // The normal "Setup" attribute doesn't work with async methods
+            Setup();
+
+            _propertyMapper.Setup(
+                x => x.Map(It.IsAny<EPiServerModel>(), It.IsAny<ViewModel>()));
+
+            _contentHandlerPipeline.Setup(
+                x => x.Raise(It.IsAny<HandlerArgs<FormModel, EPiServerModel, ViewModel>>())).ReturnsAsync(false);
+
+            // Act
+            ViewModel viewModel = await _viewModelBuilder.BuildAsync<FormModel, EPiServerModel, ViewModel>(new FormModel() { Step = 1 }, new EPiServerModel() { Title = "MoFo" });
+
+            // Assert
+            Assert.That(viewModel, Is.Not.Null);
+            _contentHandlerPipeline.Verify(c => c.Raise(It.IsAny<HandlerArgs<FormModel, EPiServerModel, ViewModel>>()), Times.Once());
+            _propertyMapper.Verify(x => x.Map(It.IsAny<EPiServerModel>(), It.IsAny<ViewModel>()), Times.Once());
+        }
+
+        [Test]
+        public async void Build_EpiServerModelAndFormModel_ModelBuiltAndHandledSoDefaultMappingNotUsed()
+        {
+            // Arrange
+            // The normal "Setup" attribute doesn't work with async methods
+            Setup();
+
+            _propertyMapper.Setup(
+                x => x.Map(It.IsAny<EPiServerModel>(), It.IsAny<ViewModel>()));
+
+            _contentHandlerPipeline.Setup(
+                x => x.Raise(It.IsAny<HandlerArgs<FormModel, EPiServerModel, ViewModel>>())).ReturnsAsync(true);
+
+            // Act
+            ViewModel viewModel = await _viewModelBuilder.BuildAsync<FormModel, EPiServerModel, ViewModel>(new FormModel() { Step = 1 }, new EPiServerModel() { Title = "MoFo" });
+
+            // Assert
+            Assert.That(viewModel, Is.Not.Null);
+            _contentHandlerPipeline.Verify(c => c.Raise(It.IsAny<HandlerArgs<FormModel, EPiServerModel, ViewModel>>()), Times.Once());
             _propertyMapper.Verify(x => x.Map(It.IsAny<EPiServerModel>(), It.IsAny<ViewModel>()), Times.Never());
         }
 
