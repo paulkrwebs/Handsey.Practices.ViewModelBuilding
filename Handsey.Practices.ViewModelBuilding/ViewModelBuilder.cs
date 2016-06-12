@@ -13,6 +13,28 @@
             _propertyMapper = propertyMapper;
         }
 
+        public TToCreate Build<TToCreate>()
+           where TToCreate : new()
+        {
+            var to = new TToCreate();
+
+            var args = new HandlerArgs<TToCreate>(to);
+            _contentHandlerPipeline.Raise(args);
+
+            return to;
+        }
+
+        public async Task<TToCreate> BuildAsync<TToCreate>()
+           where TToCreate : new()
+        {
+            var to = new TToCreate();
+
+            var args = new HandlerArgs<TToCreate>(to);
+            await _contentHandlerPipeline.RaiseAsync(args);
+
+            return to;
+        }
+
         public TToCreate Build<TFrom, TToCreate>(TFrom @from)
             where TToCreate : new()
         {

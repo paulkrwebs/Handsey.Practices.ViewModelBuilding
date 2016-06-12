@@ -4,6 +4,12 @@
 
     public interface IViewModelBuilder
     {
+        TToCreate Build<TToCreate>()
+            where TToCreate : new();
+
+        Task<TToCreate> BuildAsync<TToCreate>()
+            where TToCreate : new();
+
         TToCreate Build<TFrom, TToCreate>(TFrom @from)
             where TToCreate : new();
 

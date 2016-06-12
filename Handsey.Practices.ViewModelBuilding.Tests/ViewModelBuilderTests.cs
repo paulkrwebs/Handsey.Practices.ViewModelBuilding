@@ -24,6 +24,42 @@
         }
 
         [Test]
+        public void Build_NoParams_ModelBuiltAndHandlersRaisedOnPipeline()
+        {
+            // Arrange
+            // The normal "Setup" attribute doesn't work with async methods
+            Setup();
+
+            _contentHandlerPipeline.Setup(
+                x => x.Raise(It.IsAny<HandlerArgs<ViewModel>>()));
+
+            // Act
+            ViewModel viewModel = _viewModelBuilder.Build<ViewModel>();
+
+            // Assert
+            Assert.That(viewModel, Is.Not.Null);
+            _contentHandlerPipeline.Verify(c => c.Raise(It.IsAny<HandlerArgs<ViewModel>>()), Times.Once());
+        }
+
+        [Test]
+        public async void BuildAsync_NoParams_ModelBuiltAndHandlersRaisedOnPipeline()
+        {
+            // Arrange
+            // The normal "Setup" attribute doesn't work with async methods
+            Setup();
+
+            _contentHandlerPipeline.Setup(
+                x => x.RaiseAsync(It.IsAny<HandlerArgs<ViewModel>>())).ReturnsAsync(true);
+
+            // Act
+            ViewModel viewModel = await _viewModelBuilder.BuildAsync<ViewModel>();
+
+            // Assert
+            Assert.That(viewModel, Is.Not.Null);
+            _contentHandlerPipeline.Verify(c => c.RaiseAsync(It.IsAny<HandlerArgs<ViewModel>>()), Times.Once());
+        }
+
+        [Test]
         public void Build_EpiServerModel_ModelBuiltAndNotHandledSoDefaultMappingUsed()
         {
             // Arrange

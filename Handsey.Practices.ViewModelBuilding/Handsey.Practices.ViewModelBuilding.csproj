@@ -50,6 +50,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ContentHandlerPipeline.cs" />
+    <Compile Include="HandlerArgs`1.cs" />
     <Compile Include="HandlerArgs.cs" />
     <Compile Include="HandlerArgs`2.cs" />
     <Compile Include="HandlerArgs`3.cs" />
