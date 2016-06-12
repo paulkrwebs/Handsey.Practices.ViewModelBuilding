@@ -13,13 +13,40 @@
             _propertyMapper = propertyMapper;
         }
 
+        public TToCreate Build<TFrom, TToCreate>(TFrom @from)
+            where TToCreate : new()
+        {
+            var to = new TToCreate();
+
+            var args = new HandlerArgs<TFrom, TToCreate>(@from, to);
+            var handled = _contentHandlerPipeline.Raise(args);
+
+            if (!handled)
+                _propertyMapper.Map(from, to);
+
+            return to;
+        }
+
+        public TToCreate Build<TData, TFrom, TToCreate>(TData data, TFrom @from) where TToCreate : new()
+        {
+            var to = new TToCreate();
+
+            var args = new HandlerArgs<TData, TFrom, TToCreate>(data, @from, to);
+            var handled = _contentHandlerPipeline.Raise(args);
+
+            if (!handled)
+                _propertyMapper.Map(from, to);
+
+            return to;
+        }
+
         public async Task<TToCreate> BuildAsync<TFrom, TToCreate>(TFrom @from)
             where TToCreate : new()
         {
             var to = new TToCreate();
 
             var args = new HandlerArgs<TFrom, TToCreate>(@from, to);
-            var handled = await _contentHandlerPipeline.Raise(args);
+            var handled = await _contentHandlerPipeline.RaiseAsync(args);
 
             if (!handled)
                 _propertyMapper.Map(from, to);
@@ -32,7 +59,7 @@
             var to = new TToCreate();
 
             var args = new HandlerArgs<TData, TFrom, TToCreate>(data, @from, to);
-            var handled = await _contentHandlerPipeline.Raise(args);
+            var handled = await _contentHandlerPipeline.RaiseAsync(args);
 
             if (!handled)
                 _propertyMapper.Map(from, to);

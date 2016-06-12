@@ -4,7 +4,10 @@
 
     public interface IContentHandlerPipeline
     {
-        Task<bool> Raise<THandlerArgs>(THandlerArgs args)
+        bool Raise<THandlerArgs>(THandlerArgs args)
+            where THandlerArgs : HandlerArgs;
+
+        Task<bool> RaiseAsync<THandlerArgs>(THandlerArgs args)
             where THandlerArgs : HandlerArgs;
     }
 }
