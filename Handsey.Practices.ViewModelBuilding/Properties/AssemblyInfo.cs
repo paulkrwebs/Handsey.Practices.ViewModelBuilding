@@ -6,9 +6,9 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("Handsey.Practices.ViewModelBuilding")]
-[assembly: AssemblyDescription("A view model builder that ")]
+[assembly: AssemblyDescription("A view model builder that uses handlers to build the view model")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
+[assembly: AssemblyCompany("Paul Kiernan")]
 [assembly: AssemblyProduct("Handsey.Practices.ViewModelBuilding")]
 [assembly: AssemblyCopyright("Copyright ©  2016")]
 [assembly: AssemblyTrademark("")]
