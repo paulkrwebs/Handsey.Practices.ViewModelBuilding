@@ -16,10 +16,10 @@ namespace Handsey.Practices.ViewModelBuilding
             _application = application;
         }
 
-        public Task<bool> RaiseAsync<THandlerArgs>(THandlerArgs args)
+        public async Task<bool> RaiseAsync<THandlerArgs>(THandlerArgs args)
             where THandlerArgs : HandlerArgs
         {
-            return _application.InvokeAsync<IHandlerAsync<THandlerArgs>>(async h => await h.HandleAsync(args));
+            return await _application.InvokeAsync<IHandlerAsync<THandlerArgs>>(async h => await h.HandleAsync(args));
         }
 
         public bool Raise<THandlerArgs>(THandlerArgs args)
