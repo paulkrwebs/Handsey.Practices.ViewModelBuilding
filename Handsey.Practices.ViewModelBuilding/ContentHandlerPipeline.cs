@@ -1,7 +1,5 @@
-﻿using Handsey.Handlers;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using BuildUp;
+using Handsey.Handlers;
 
 namespace Handsey.Practices.ViewModelBuilding
 {

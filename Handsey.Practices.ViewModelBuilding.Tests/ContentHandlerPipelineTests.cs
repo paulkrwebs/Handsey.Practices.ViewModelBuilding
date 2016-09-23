@@ -1,5 +1,6 @@
 ﻿namespace Handsey.Practices.ViewModelBuilding.Tests
 {
+    using BuildUp;
     using Handsey.Handlers;
     using Moq;
     using NUnit.Framework;

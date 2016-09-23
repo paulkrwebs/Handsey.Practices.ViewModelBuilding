@@ -31,6 +31,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="BuildUp, Version=0.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\BuildUp.0.1.0-a0005\lib\net45\BuildUp.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Handsey, Version=0.1.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Handsey.0.1.0-a0085\lib\net45\Handsey.dll</HintPath>
       <Private>True</Private>
@@ -50,15 +54,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ContentHandlerPipeline.cs" />
-    <Compile Include="HandlerArgs`1.cs" />
-    <Compile Include="HandlerArgs.cs" />
-    <Compile Include="HandlerArgs`2.cs" />
-    <Compile Include="HandlerArgs`3.cs" />
-    <Compile Include="IContentHandlerPipeline.cs" />
-    <Compile Include="IPropertyMapper.cs" />
-    <Compile Include="IViewModelBuilder.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ViewModelBuilder.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
