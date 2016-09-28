@@ -32,7 +32,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="BuildUp, Version=0.1.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\BuildUp.0.1.0-a0005\lib\net45\BuildUp.dll</HintPath>
+      <HintPath>..\packages\BuildUp.0.1.0-a0008\lib\net45\BuildUp.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Handsey, Version=0.1.0.0, Culture=neutral, processorArchitecture=MSIL">
@@ -53,7 +53,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ContentHandlerPipeline.cs" />
+    <Compile Include="HandseyContentHandlerPipeline.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

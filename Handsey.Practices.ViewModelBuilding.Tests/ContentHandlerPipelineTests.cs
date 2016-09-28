@@ -11,12 +11,12 @@
     public class ContentHandlerPipelineTests
     {
         private Mock<IApplicaton> _application;
-        private ContentHandlerPipeline _contentHandlerPipeline;
+        private HandseyContentHandlerPipeline _contentHandlerPipeline;
 
         public void Setup()
         {
             _application = new Mock<IApplicaton>();
-            _contentHandlerPipeline = new ContentHandlerPipeline(_application.Object);
+            _contentHandlerPipeline = new HandseyContentHandlerPipeline(_application.Object);
         }
 
         [TestCase(true)]
@@ -27,14 +27,14 @@
             // The normal "Setup" attribute doesn't work with async methods
             Setup();
 
-            _application.Setup(a => a.Invoke(It.IsAny<Action<IHandler<HandlerArgs>>>())).Returns(data);
+            _application.Setup(a => a.Invoke(It.IsAny<Action<IContentHandler<ContentHandlerArgs>>>())).Returns(data);
 
             // Act
-            bool result = _contentHandlerPipeline.Raise(new Mock<HandlerArgs>().Object);
+            bool result = _contentHandlerPipeline.Raise(new Mock<ContentHandlerArgs>().Object);
 
             // Assert
             Assert.That(result, Is.EqualTo(data), "Invoke result should be returned");
-            _application.Verify(a => a.Invoke(It.IsAny<Action<IHandler<HandlerArgs>>>()), Times.Once, "Handsey application was not called");
+            _application.Verify(a => a.Invoke(It.IsAny<Action<IContentHandler<ContentHandlerArgs>>>()), Times.Once, "Handsey application was not called");
         }
 
         [TestCase(true)]
@@ -45,19 +45,19 @@
             // The normal "Setup" attribute doesn't work with async methods
             Setup();
 
-            _application.Setup(a => a.InvokeAsync(It.IsAny<Func<IHandlerAsync<HandlerArgs>, Task>>())).ReturnsAsync(data);
+            _application.Setup(a => a.InvokeAsync(It.IsAny<Func<IContentHandlerAsync<ContentHandlerArgs>, Task>>())).ReturnsAsync(data);
 
             // Act
-            bool result = await _contentHandlerPipeline.RaiseAsync(new Mock<HandlerArgs>().Object);
+            bool result = await _contentHandlerPipeline.RaiseAsync(new Mock<ContentHandlerArgs>().Object);
 
             // Assert
             Assert.That(result, Is.EqualTo(data), "Rsise should return true");
-            _application.Verify(a => a.InvokeAsync(It.IsAny<Func<IHandlerAsync<HandlerArgs>, Task>>()), Times.Once, "Handsey application was not called");
+            _application.Verify(a => a.InvokeAsync(It.IsAny<Func<IContentHandlerAsync<ContentHandlerArgs>, Task>>()), Times.Once, "Handsey application was not called");
         }
 
         #region // data
 
-        public class MockHandlerArgs : HandlerArgs
+        public class MockHandlerArgs : ContentHandlerArgs
         { }
 
         #endregion // data
